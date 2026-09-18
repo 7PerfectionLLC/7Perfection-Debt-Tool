@@ -1,0 +1,17 @@
+{
+  "name": "7perfection-debt-tool",
+  "version": "4.0.0",
+  "private": true,
+  "description": "7Perfection Multiservices LLC - Jesyon Dèt",
+  "main": "server.js",
+  "scripts": {"start":"node server.js"},
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "better-sqlite3": "^11.10.0",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.0.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

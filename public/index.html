@@ -1,0 +1,68 @@
+<!doctype html><html lang="ht"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#171717"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="logo.png"><link rel="icon" href="logo.png"><title>7Perfection — Jesyon Dèt</title>
+<style>
+:root{--bg:#f4f2ed;--card:#fff;--ink:#171717;--muted:#777;--gold:#b58a32;--green:#2e7650;--red:#a33a32}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+.wrap{max-width:650px;margin:auto;padding:16px}.card{background:var(--card);border-radius:20px;padding:18px;margin:0 0 13px;box-shadow:0 6px 25px #0000000a}.logo{width:130px;height:130px;object-fit:contain;display:block;margin:auto}.brand{text-align:center;font-weight:900;letter-spacing:.6px}.muted{color:var(--muted);font-size:13px}
+.lock{min-height:100vh;display:flex;align-items:center}.pin,.field{width:100%;padding:13px;border:1px solid #ddd;border-radius:13px;background:white}.pin{font-size:28px;text-align:center;letter-spacing:9px;margin:14px 0}
+.btn{border:0;border-radius:14px;padding:13px 15px;font-weight:800;width:100%;cursor:pointer;margin-top:8px}.primary{background:var(--ink);color:white}.gold{background:var(--gold);color:white}.light{background:#eee}.green{background:#e7f2eb;color:var(--green)}.red{background:#f7e7e5;color:var(--red)}
+.hidden{display:none!important}.top{display:flex;justify-content:space-between;align-items:center;gap:10px}.brandTop{display:flex;align-items:center;gap:9px}.brandTop img{width:42px;height:42px;object-fit:contain;border-radius:10px}.mini{width:auto;margin:0;padding:9px 11px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.stat{background:#faf8f3;padding:14px;border-radius:15px}.stat b{font-size:23px;display:block;margin-top:3px}
+label{font-size:13px;font-weight:800}.field{font-size:16px;margin:6px 0 11px}.customer{border:1px solid #eee;border-radius:16px;padding:14px;margin-top:10px}.row{display:flex;justify-content:space-between;align-items:center;gap:12px}.name{font-weight:850}.amount{font-weight:900;color:var(--gold)}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}.tabs button{margin:0}.empty{text-align:center;padding:24px;color:var(--muted)}.toast{position:fixed;left:16px;right:16px;bottom:16px;background:#171717;color:#fff;padding:14px;border-radius:14px;text-align:center;display:none;z-index:9}
+</style></head><body>
+<div id="login" class="lock"><div class="wrap"><div class="card"><img src="logo.png" class="logo"><div class="brand">7PERFECTION MULTISERVICES LLC</div><div class="muted" style="text-align:center">Zouti Jesyon Dèt • Lovely Pierre</div><h3 style="text-align:center;margin-top:25px">🔐 Antre kòd sekrè a</h3><input id="pin" class="pin" type="password" inputmode="numeric" maxlength="6" placeholder="••••"><button class="btn primary" onclick="login()">Antre</button><p class="muted">Pou vèsyon sèvè sa a, PIN inisyal la se 2580. Chanje li apre premye koneksyon.</p></div></div></div>
+
+<div id="app" class="hidden"><div class="wrap">
+<div class="top"><div class="brandTop"><img src="logo.png" alt="7Perfection"><div><b>7PERFECTION</b><div class="muted">Jesyon Dèt</div></div></div><button class="btn mini" onclick="logout()">🔒 Fèmen</button></div>
+<div class="card" style="margin-top:12px"><div class="muted">Responsab: <b>Lovely Pierre</b></div><div class="stats"><div class="stat">💰 Total dèt<b id="total">$0.00</b></div><div class="stat">👥 Kliyan ki dwe<b id="count">0</b></div></div></div>
+<div class="tabs"><button id="activeTab" type="button" class="btn gold" onclick="tab('active')">📋 Dèt aktif</button><button id="archiveTab" type="button" class="btn light" onclick="tab('archive')">📁 Achiv</button></div>
+<section id="active"><button type="button" class="btn gold" onclick="showCustomerForm()">➕ Ajoute yon kliyan</button>
+<div id="customerForm" class="card hidden"><div class="top"><h2>Nouvo kliyan</h2><button type="button" class="btn mini" onclick="hideCustomerForm()">✕</button></div><label>Non kliyan an</label><input id="name" class="field" placeholder="Egzanp: Jean Pierre"><label>Telefòn (si ou vle)</label><input id="phone" class="field" placeholder="(xxx) xxx-xxxx"><label>Konbyen li dwe?</label><input id="debt" class="field" type="number" min="0" step=".01" placeholder="0.00"><label>Kantite pla li achte</label><input id="plates" class="field" type="number" min="0" step="1" value="0" placeholder="0"><label>Kantite Bwason/Ji li achte</label><input id="drinks" class="field" type="number" min="0" step="1" value="0" placeholder="0"><button type="button" class="btn primary" onclick="addCustomer()">💾 Anrejistre kliyan an</button></div>
+<div class="card"><h2>Dèt aktif</h2><input id="search" class="field" placeholder="🔎 Chèche kliyan..." oninput="render()"><div id="list"></div></div></section>
+<section id="archive" class="hidden"><div class="card"><h2>Dèt ki fini</h2><div id="archiveList"></div></div></section>
+<div id="detail" class="card hidden"></div>
+<div class="card"><h2>⚙️ Paramèt</h2><button class="btn light" onclick="changePin()">🔐 Chanje PIN</button><p class="muted">Done yo sou sèvè a, epi aksè a mande login. Lè n ap mete l sou entènèt, HTTPS ap obligatwa.</p></div>
+</div></div><div id="toast" class="toast"></div>
+<script>
+const $ = id => document.getElementById(id);
+let customers=[];
+const money=n=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(n/100);
+function msg(s){const el=$("toast");el.textContent=s;el.style.display="block";setTimeout(()=>el.style.display="none",1800)}
+async function api(url,opt={}){let r=await fetch(url,{...opt,headers:{"Content-Type":"application/json",...(opt.headers||{})}});let x=await r.json().catch(()=>({}));if(!r.ok)throw Error(x.error||"Gen yon pwoblèm.");return x}
+async function login(){try{await api("/api/login",{method:"POST",body:JSON.stringify({pin:$("pin").value})});$("login").classList.add("hidden");$("app").classList.remove("hidden");await load();msg("✅ Byenveni Lovely Pierre.")}catch(e){msg("❌ "+e.message)}}
+async function logout(){try{await api("/api/logout",{method:"POST"})}finally{$("app").classList.add("hidden");$("login").classList.remove("hidden");$("pin").value=""}}
+async function load(){customers=await api("/api/customers");render()}
+function render(){let q=($("search").value||"").toLowerCase(),activeCustomers=customers.filter(c=>!c.archived&&c.remaining_cents>0&&c.name.toLowerCase().includes(q));$("total").textContent=money(customers.reduce((s,c)=>s+(!c.archived?c.remaining_cents:0),0));$("count").textContent=customers.filter(c=>!c.archived&&c.remaining_cents>0).length;$("list").innerHTML=activeCustomers.length?activeCustomers.map(c=>`<div class="customer"><div class="row"><div><div class="name">${esc(c.name)}</div><div class="muted">${esc(c.phone||"Pa gen telefòn")}</div><div class="muted">🍽️ Pla: ${c.plates_count||0} • 🥤 Bwason/Ji: ${c.drinks_count||0}</div></div><div class="amount">${money(c.remaining_cents)}</div></div><button class="btn light" onclick="details(${c.id})">👁️ Gade detay</button></div>`).join(""):'<div class="empty">Pa gen kliyan ki gen dèt aktif.</div>';
+$("archiveList").innerHTML=customers.filter(c=>c.archived).map(c=>`<div class="customer"><div class="row"><div><div class="name">${esc(c.name)}</div><div class="muted">Dèt: ${money(c.debt_cents)} • Peye: ${money(c.paid_cents)}</div><div class="muted">🍽️ Pla: ${c.plates_count||0} • 🥤 Bwason/Ji: ${c.drinks_count||0}</div></div><b>✅</b></div><button class="btn light" onclick="details(${c.id})">👁️ Gade detay</button></div>`).join("")||'<div class="empty">Pa gen dèt nan achiv la.</div>'}
+function showCustomerForm(){
+  $("customerForm").classList.remove("hidden");
+  $("name").focus();
+}
+function hideCustomerForm(){
+  $("customerForm").classList.add("hidden");
+}
+async function addCustomer(){
+  let n=$("name").value.trim(), d=Number($("debt").value);
+  if(!n || !(d>0)) return msg("⚠️ Mete non an ak yon montan ki valab.");
+  try{
+    await api("/api/customers",{method:"POST",body:JSON.stringify({name:n,phone:$("phone").value.trim(),debt:d,plates_count:Number($("plates").value||0),drinks_count:Number($("drinks").value||0)})});
+    $("name").value="";
+    $("phone").value="";
+    $("debt").value="";
+    $("plates").value="0";
+    $("drinks").value="0";
+    hideCustomerForm();
+    await load();
+    msg("✅ Kliyan an anrejistre.");
+  }catch(e){msg("❌ "+e.message)}
+}
+async function details(id){let c=customers.find(x=>x.id===id);if(!c)return msg("❌ Kliyan an pa jwenn.");let ps=await api("/api/customers/"+id+"/payments");$("detail").classList.remove("hidden");$("detail").innerHTML=`<div class="top"><h2>${esc(c.name)}</h2><button class="btn mini" onclick="$('detail').classList.add('hidden')">✕</button></div><p>🍽️ Pla: <b>${c.plates_count||0}</b> • 🥤 Bwason/Ji: <b>${c.drinks_count||0}</b><br>💰 Dèt total: <b>${money(c.debt_cents)}</b><br>💵 Li peye: <b>${money(c.paid_cents)}</b><br>📌 Ki rete: <b class="amount">${money(c.remaining_cents)}</b></p>${c.remaining_cents?`<label>Konbyen li peye jodi a?</label><input id="payAmount" class="field" type="number" min="0" step=".01" max="${c.remaining_cents/100}"><button class="btn primary" onclick="pay(${id})">💵 Anrejistre peman</button>`:`<button class="btn green">✅ Dèt sa a fin peye</button>`}<button class="btn light" onclick="edit(${id})">✏️ Modifye</button>${c.archived?`<button class="btn red" onclick="del(${id})">🗑️ Efase nèt</button>`:""}<hr><div class="muted"><b>Istorik peman</b></div>${ps.length?ps.map(p=>`<p class="muted">• ${money(p.amount_cents)} — ${new Date(p.created_at).toLocaleDateString()}</p>`).join(""):'<p class="muted">Pa gen peman ankò.</p>'}`;$("detail").scrollIntoView({behavior:"smooth"})}
+async function pay(id){try{await api("/api/customers/"+id+"/payments",{method:"POST",body:JSON.stringify({amount:Number($("payAmount").value)})});await load();$("detail").classList.add("hidden");msg("✅ Peman an anrejistre.")}catch(e){msg("❌ "+e.message)}}
+async function edit(id){let c=customers.find(x=>x.id===id),n=prompt("Non kliyan an:",c.name);if(n===null)return;let d=prompt("Dèt total la:",(c.debt_cents/100).toFixed(2));if(d===null)return;let plates=prompt("Kantite pla:",c.plates_count||0);if(plates===null)return;let drinks=prompt("Kantite Bwason/Ji:",c.drinks_count||0);if(drinks===null)return;try{await api("/api/customers/"+id,{method:"PATCH",body:JSON.stringify({name:n,phone:c.phone||"",debt:Number(d),plates_count:Number(plates),drinks_count:Number(drinks)})});await load();details(id);msg("✅ Modifye.")}catch(e){msg("❌ "+e.message)}}
+async function del(id){if(!confirm("⚠️ Efase kliyan sa a nèt?"))return;try{await api("/api/customers/"+id,{method:"DELETE"});await load();$("detail").classList.add("hidden");msg("🗑️ Efase.")}catch(e){msg("❌ "+e.message)}}
+async function changePin(){let old=prompt("PIN aktyèl la:"),n=prompt("Nouvo PIN (4–6 chif):");if(old===null||n===null)return;try{await api("/api/change-pin",{method:"POST",body:JSON.stringify({oldPin:old,newPin:n})});await logout();msg("✅ PIN lan chanje. Konekte ak nouvo PIN lan.")}catch(e){msg("❌ "+e.message)}}
+function tab(x){const isArchive=x==="archive";$("active").classList.toggle("hidden",isArchive);$("archive").classList.toggle("hidden",!isArchive);$("activeTab").classList.toggle("gold",!isArchive);$("activeTab").classList.toggle("light",isArchive);$("archiveTab").classList.toggle("gold",isArchive);$("archiveTab").classList.toggle("light",!isArchive);$("detail").classList.add("hidden");window.scrollTo({top:0,behavior:"smooth"})}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
+$("pin").addEventListener("keydown",e=>{if(e.key==="Enter")login()});
+if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js?v=2").catch(()=>{});}tab("active");
+</script></body></html>

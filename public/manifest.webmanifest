@@ -1,0 +1,9 @@
+{
+  "name": "7Perfection — Jesyon Dèt",
+  "short_name": "7Perfection",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f2ed",
+  "theme_color": "#171717",
+  "icons": [{"src":"/logo.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]
+}
